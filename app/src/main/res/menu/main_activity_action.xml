@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:yourapp="http://schemas.android.com/apk/res-auto">
+    <!-- Search, should appear as action button -->
+    <item android:id="@+id/menu_map"
+        android:icon="@drawable/menu_map"
+        android:title="@string/menu_map"
+        yourapp:showAsAction="always" />
+
+    <item android:id="@+id/menu_write"
+        android:icon="@drawable/menu_write"
+        android:title="@string/menu_write"
+        yourapp:showAsAction="always" />
+
+    <item android:id="@+id/menu_receive"
+        android:icon="@drawable/menu_receive"
+        android:title="@string/menu_receive"
+        yourapp:showAsAction="always" />
+
+    <item android:id="@+id/menu_setting"
+        android:icon="@drawable/menu_setting"
+        android:title="@string/menu_setting"
+        yourapp:showAsAction="always" />
+
+</menu>
