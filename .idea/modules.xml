@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MJU_SNS.iml" filepath="$PROJECT_DIR$/MJU_SNS.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mju_sns.iml" filepath="$PROJECT_DIR$/mju_sns.iml" />
     </modules>
   </component>
 </project>

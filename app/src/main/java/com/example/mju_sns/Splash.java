@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-
 import com.example.mju_sns.MainActivity;
 import com.example.mju_sns.R;
 
