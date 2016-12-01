@@ -27,7 +27,6 @@ public class TabFragment2 extends Fragment {
 
         View v = inflater.inflate(R.layout.tab_fragment_2, container, false);
         list=new ArrayList<listItem>();     // ArrayList로 생성
-        System.out.print("!!!!!!!!!!!!!!!!!!!!");
         lv = (ListView)v.findViewById(R.id.lv);
 
 
