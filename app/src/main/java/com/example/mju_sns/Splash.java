@@ -59,10 +59,9 @@ public class Splash extends Activity implements Serializable {
         new TedPermission(this)
                 .setPermissionListener(permissionlistener)
                 .setDeniedMessage("권한을 허용하지 않으면 서비스를 이용할 수 없습니다.\n\n[설정]메뉴에서 권한을 확인해 주세요.")
-                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE)
+                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE, Manifest.permission.GET_ACCOUNTS)
                 .check();
 
     }
-
 
 }
