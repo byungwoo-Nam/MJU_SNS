@@ -1,0 +1,37 @@
+{
+  "project_info": {
+    "project_number": "1017426570689",
+    "firebase_url": "https://mjusns-151211.firebaseio.com",
+    "project_id": "mjusns-151211",
+    "storage_bucket": "mjusns-151211.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1017426570689:android:4f636dcfda5729e6",
+        "android_client_info": {
+          "package_name": "com.example.mju_sns"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnapOZrhs8iYNQ64a27wABchgwwGspjns"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
