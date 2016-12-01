@@ -8,8 +8,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.mju_sns.util.api.DaumMap.DaumMap;
-import com.example.mju_sns.util.config.CodeConfig;
+import com.example.mju_sns.util.api.daumMap.DaumMap;
+import com.example.mju_sns.util.config.app.CodeConfig;
 
 import static android.view.KeyEvent.ACTION_UP;
 

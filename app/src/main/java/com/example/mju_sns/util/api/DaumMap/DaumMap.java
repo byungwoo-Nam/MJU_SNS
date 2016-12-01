@@ -1,4 +1,4 @@
-package com.example.mju_sns.util.api.DaumMap;
+package com.example.mju_sns.util.api.daumMap;
 
 import android.app.Activity;
 
