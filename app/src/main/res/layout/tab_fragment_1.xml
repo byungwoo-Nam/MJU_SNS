@@ -17,7 +17,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true">
+
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/mapMarker"
@@ -30,6 +32,30 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
 
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/location"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="4"
+        android:hint="장소를 입력해 주세요"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:maxLength="7"
+        android:inputType="text"
+        android:layout_marginBottom="211dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/border_top" />
+
+    <RelativeLayout
+        android:id="@+id/input_area"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="261dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
     </RelativeLayout>
 
 </RelativeLayout>
