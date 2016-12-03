@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.example.mju_sns.util.config.app.AppBoot;
 import com.example.mju_sns.util.config.app.URLConnector;
 import com.example.mju_sns.util.fcm.FcmStarter;
-import com.example.mju_sns.util.gps.Location;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
