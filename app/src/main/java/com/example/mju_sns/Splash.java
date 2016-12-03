@@ -1,5 +1,6 @@
 package com.example.mju_sns;
 
+import android.*;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,7 +8,9 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 import com.example.mju_sns.util.config.app.AppBoot;
 import com.example.mju_sns.util.config.app.URLConnector;
 import com.example.mju_sns.util.fcm.FcmStarter;
+import com.example.mju_sns.util.gps.Location;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -56,7 +60,8 @@ public class Splash extends Activity {
         new TedPermission(this)
                 .setPermissionListener(permissionlistener)
                 .setDeniedMessage("권한을 허용하지 않으면 서비스를 이용할 수 없습니다.\n\n[설정]메뉴에서 권한을 확인해 주세요.")
-                .setPermissions(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.GET_ACCOUNTS)
+                .setPermissions(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.GET_ACCOUNTS,
+                        android.Manifest.permission.ACCESS_COARSE_LOCATION)
                 .check();
     }
 
