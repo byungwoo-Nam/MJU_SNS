@@ -45,7 +45,7 @@ public class MyGcmListenerService extends GcmListenerService {
      * @param message
      */
     private void sendNotification(String title, String message) {
-        Intent intent = new Intent(this, com.example.mju_sns.AppInitActivity.class);
+        Intent intent = new Intent(this, com.example.mju_sns.Splash.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);

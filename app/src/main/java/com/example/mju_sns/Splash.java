@@ -1,6 +1,5 @@
 package com.example.mju_sns;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -8,10 +7,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -21,17 +17,13 @@ import android.widget.Toast;
 import com.example.mju_sns.util.config.app.AppBoot;
 import com.example.mju_sns.util.config.app.URLConnector;
 import com.example.mju_sns.util.fcm.FcmStarter;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.concurrent.CountDownLatch;
 
 public class Splash extends Activity {
 
