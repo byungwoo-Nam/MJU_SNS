@@ -1,19 +1,13 @@
 package com.example.mju_sns.util.config.app;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
-import android.telephony.TelephonyManager;
 
 import com.example.mju_sns.util.config.database.FeedReaderDbHelper;
-import com.example.mju_sns.util.dto.Users;
-import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -23,22 +17,23 @@ public class AppBoot {
     private SQLiteDatabase mDB;
     private DeviceUuidFactory duf;
     private URLConnector urlConnector;
-    private UUID uuid;
-    private boolean isMember;
 
-    public boolean isMember() {
-        return isMember;
-    }
+    private String uuid;
+    private String fcmToken;
+    private boolean isMember;
 
     public AppBoot(Activity activity){
         this.activity = activity;
     }
 
     public void init(){
+        permissionCheck();
         createDB();
         getUUID();
-        //getGcm 들어가야 함
         this.isMember = checkMember();
+    }
+
+    public void permissionCheck(){
     }
     public void createDB(){
         FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(this.activity);
@@ -47,29 +42,26 @@ public class AppBoot {
     }
     public void getUUID(){
         this.duf = new DeviceUuidFactory(this.activity);
-        this.uuid = duf.getDeviceUuid();
+        this.uuid = duf.getDeviceUuid().toString();
     }
     public boolean checkMember(){
         SharedPreferences prefs = this.activity.getSharedPreferences("mju_sns", MODE_PRIVATE);
         String text = prefs.getString("isMember", "");
+        System.out.println("sharedPrefer::" + text);
         return text.equals("true");
+    }
 
-//        this.urlConnector = new URLConnector();
-//        JSONObject param = new JSONObject();
-//        try {
-//            param.put("mode", "memberCheck");
-//            param.put("id", uuid);
-//        }catch (JSONException e){
-//            e.printStackTrace();
-//        }
-//        String result = this.urlConnector.getData(param);
-//
-//        if(result!=""){
-//            Gson gson = new Gson();
-//            gson.fromJson(result, Users.class);
-//            return true;
-//        }else{
-//            return false;
-//        }
+    public String getUuid() {
+        return this.uuid;
+    }
+    public String getFcmToken() {
+        return this.fcmToken;
+    }
+    public boolean getIsMember() {
+        return isMember;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 }

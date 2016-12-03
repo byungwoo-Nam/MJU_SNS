@@ -1,5 +1,7 @@
 package com.example.mju_sns.util.config.app;
 
+import android.support.v4.util.Pools;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,37 +9,48 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
 
 public class URLConnector{
     private JSONObject param;
     private String result;
+    private boolean isSynchronized;
+    private CountDownLatch latch;
 
-    public String getData(JSONObject param){
+    public String getData(JSONObject param, boolean isSynchronized){
         this.param = param;
+        this.isSynchronized = isSynchronized;
         if(this.param == null || this.param.isNull("mode")){
             return null;
         }
 
-        Thread networkThread = new Thread() {
+        if(this.isSynchronized){
+            this.latch = new CountDownLatch(1);
+        }
+
+        new Thread() {
             public void run() {
                 connection();
             }
-        };
+        }.start();
 
-        networkThread.start();
-
-        try{
-            networkThread.join();
-        }catch(InterruptedException e) {
-            e.printStackTrace();
+        if(this.isSynchronized){
+            try{
+                this.latch.await();
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
         }
 
         return result;
     }
 	
 	public void connection(){
+        System.out.println("connection");
+
         try {
             CodeConfig codeConfig = new CodeConfig();
             JSONObject responseJSON = null;
@@ -54,6 +67,7 @@ public class URLConnector{
             httpUrlConnection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
             httpUrlConnection.setRequestMethod("POST");
 
+            System.out.println(param.toString());
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(httpUrlConnection.getOutputStream());
             outputStreamWriter.write(param.toString());
             outputStreamWriter.flush();
@@ -68,9 +82,11 @@ public class URLConnector{
                 }
                 br.close();
             }
-
-            result = response;
-
+            System.out.println("connection:response" + response);
+            this.result = response;
+            if(this.isSynchronized) {
+                this.latch.countDown();
+            }
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
