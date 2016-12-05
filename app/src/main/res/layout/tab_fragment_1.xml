@@ -139,7 +139,7 @@
     <Button
         android:text="등록하기"
         android:id="@+id/apply"
-        android:background="@drawable/btn_green"
+        android:background="@drawable/btn_blue"
         style="@style/ButtonText"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true" />
