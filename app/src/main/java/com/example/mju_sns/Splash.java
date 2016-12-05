@@ -141,6 +141,7 @@ public class Splash extends Activity {
                         SharedPreferences prefs = activity.getSharedPreferences("mju_sns", MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putString("isMember", "true");
+                        editor.putString("token", appBoot.getFcmToken());
                         editor.commit();
                         dialog.dismiss();
                         intent = new Intent(Splash.this, MainActivity.class);
@@ -163,8 +164,6 @@ public class Splash extends Activity {
         }
         String result = urlConnector.getData(param, true);
         if(result!=""){
-//            Gson gson = new Gson();
-//            gson.fromJson(result, Users.class);
             return Integer.parseInt(result) > 0 ? false : true;
         }else{
             return false;

@@ -56,7 +56,7 @@ public class URLConnector{
             JSONObject responseJSON = null;
 
             // URL 객체 생성
-            URL url = new URL(codeConfig.server_url);
+            URL url = new URL(codeConfig.SERVER_URL);
 
             // URLConnection 생성
             HttpURLConnection httpUrlConnection = (HttpURLConnection)url.openConnection();

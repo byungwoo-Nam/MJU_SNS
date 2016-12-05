@@ -1,7 +1,9 @@
 package com.example.mju_sns;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.location.LocationManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -9,19 +11,32 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 
+import com.example.mju_sns.util.gps.CurrentLocation;
+
+import net.daum.mf.map.api.MapView;
+
 public class MainActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private CurrentLocation currentLocation;
+    private LocationManager locationManager;
+    public static MapView mapView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mapView = new MapView(this);
+
         // Adding Toolbar to the activity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        CurrentLocation currentLocation = new CurrentLocation(locationManager, this);
+        currentLocation.setCurrentLocation();
 
         // Initializing the TabLayout
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);

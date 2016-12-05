@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -34,21 +35,6 @@
 
     </RelativeLayout>
 
-    <EditText
-        android:id="@+id/location"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_weight="4"
-        android:hint="장소를 입력해 주세요"
-        android:textSize="12sp"
-        android:gravity="center"
-        android:maxLength="7"
-        android:inputType="text"
-        android:layout_marginBottom="211dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:background="@drawable/border_top" />
-
     <RelativeLayout
         android:id="@+id/input_area"
         android:layout_width="match_parent"
@@ -57,5 +43,105 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true">
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:layout_marginBottom="226dp"
+        android:background="@drawable/border"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:background="#ffffff"
+        android:layout_alignTop="@+id/location"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="36dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginTop="0dp"
+            android:layout_alignTop="@+id/location"
+            android:layout_alignParentStart="true" >
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="제목"
+                android:gravity="center"
+                android:layout_weight="0.3" />
+
+            <EditText
+                android:id="@+id/edit_title"
+                android:layout_width="286dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginTop="0dp"
+            android:layout_alignTop="@+id/location"
+            android:layout_alignParentStart="true" >
+
+            <TextView
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="내용"
+                android:gravity="center"
+                android:layout_weight="0.3" />
+
+            <EditText
+                android:id="@+id/edit_content"
+                android:layout_width="286dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginTop="0dp"
+            android:layout_alignTop="@+id/location"
+            android:layout_alignParentStart="true" >
+
+            <TextView
+                android:id="@+id/range"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="범위"
+                android:gravity="center"
+                android:layout_weight="0.3" />
+
+            <EditText
+                android:id="@+id/edit_range"
+                android:layout_width="286dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:text="등록하기"
+        android:id="@+id/apply"
+        android:background="@drawable/btn_green"
+        style="@style/ButtonText"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

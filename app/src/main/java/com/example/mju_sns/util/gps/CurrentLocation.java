@@ -3,9 +3,9 @@ package com.example.mju_sns.util.gps;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -15,7 +15,12 @@ import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.example.mju_sns.MainActivity;
+import com.example.mju_sns.util.config.app.URLConnector;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -57,7 +62,21 @@ public class CurrentLocation extends AppCompatActivity {
                         // location.getLatitude() 위도 , location.getLongitude() 경도
                         Log.e("location", "[" + location.getProvider() + "] (" + location.getLatitude() + "," + location.getLongitude() + ")");
 
-                        Toast.makeText(activity, "타입"+location.getProvider() + "," + location.getLatitude() + "," +location.getLongitude(), Toast.LENGTH_SHORT).show();
+                        URLConnector urlConnector = new URLConnector();
+                        JSONObject param = new JSONObject();
+                        try {
+                            SharedPreferences prefs = activity.getSharedPreferences("mju_sns", MODE_PRIVATE);
+                            String token = prefs.getString("token", "");
+                            param.put("mode", "updateLocation");
+                            param.put("gcm_id", token);
+                            param.put("location_latitude", location.getLatitude());
+                            param.put("location_longitude", location.getLongitude());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        urlConnector.getData(param, false);
+
+//                        Toast.makeText(activity, "타입"+location.getProvider() + "," + location.getLatitude() + "," +location.getLongitude(), Toast.LENGTH_SHORT).show();
                         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                                 ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                             return;
@@ -94,7 +113,7 @@ public class CurrentLocation extends AppCompatActivity {
                             }
                             // QQQ: 시간, 거리를 0 으로 설정하면 가급적 자주 위치 정보가 갱신되지만 베터리 소모가 많을 수 있다.
                             //최소시간, 최소거리
-                            locationManager.requestLocationUpdates(name, 5, 0, locationListener);
+                            locationManager.requestLocationUpdates(name, 0, 0, locationListener);
                         }
 
                     }

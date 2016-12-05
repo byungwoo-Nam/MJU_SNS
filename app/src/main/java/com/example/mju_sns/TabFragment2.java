@@ -29,7 +29,6 @@ public class TabFragment2 extends Fragment {
         list=new ArrayList<listItem>();     // ArrayList로 생성
         lv = (ListView)v.findViewById(R.id.lv);
 
-
         mAdatper=new MyAdapter(list);
         lv.setAdapter(mAdatper);
 

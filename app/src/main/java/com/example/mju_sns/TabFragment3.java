@@ -27,17 +27,10 @@ import java.util.List;
 
 
 public class TabFragment3 extends Fragment {
-    CurrentLocation currentLocation;
-    LocationManager locationManager;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.tab_fragment_3, container, false);
-
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        CurrentLocation currentLocation = new CurrentLocation(locationManager, getActivity());
-        currentLocation.setCurrentLocation();
-
         return v;
     }
 

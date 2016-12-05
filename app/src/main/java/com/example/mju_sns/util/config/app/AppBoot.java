@@ -47,7 +47,6 @@ public class AppBoot {
     public boolean checkMember(){
         SharedPreferences prefs = this.activity.getSharedPreferences("mju_sns", MODE_PRIVATE);
         String text = prefs.getString("isMember", "");
-        System.out.println("sharedPrefer::" + text);
         return text.equals("true");
     }
 
