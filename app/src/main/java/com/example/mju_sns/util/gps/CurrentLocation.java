@@ -15,6 +15,7 @@ import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.mju_sns.MainActivity;
 import com.example.mju_sns.util.config.app.URLConnector;
@@ -23,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.logging.Handler;
 
 /**
  * Created by kook on 2016-12-04.
@@ -100,6 +102,7 @@ public class CurrentLocation extends AppCompatActivity {
                     //위치 공급자가 사용 불가능해질(disabled) 때 호출 됩니다
                     public void onProviderDisabled(String provider) {
                         Log.e("onProviderDisabled", "onProviderDisabled");
+
                     }
                 };
 
@@ -118,14 +121,16 @@ public class CurrentLocation extends AppCompatActivity {
 
                     }
                 });
-
+                //gps 사용 선택이 안되어 있을때 핸들러
             } else {
                 Log.e("GPS Enable", "false");
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        startActivity(intent);
+                        //Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        //startActivity(intent);
+                        activity.finish();
                     }
                 });
             }

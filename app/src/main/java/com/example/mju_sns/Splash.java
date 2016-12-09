@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -27,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.logging.Handler;
 
 public class Splash extends Activity {
 
@@ -53,6 +55,7 @@ public class Splash extends Activity {
 
             @Override
             public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+
             }
         };
 
