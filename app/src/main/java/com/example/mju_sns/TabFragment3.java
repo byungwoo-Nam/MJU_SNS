@@ -23,14 +23,17 @@ import android.widget.Toast;
 
 import com.example.mju_sns.util.gps.CurrentLocation;
 
+import net.daum.mf.map.api.MapView;
+
 import java.util.List;
 
 
-public class TabFragment3 extends Fragment {
+public class TabFragment3 extends BaseFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.tab_fragment_3, container, false);
+
         return v;
     }
 

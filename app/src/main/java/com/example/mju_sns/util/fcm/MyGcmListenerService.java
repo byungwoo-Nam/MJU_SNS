@@ -27,8 +27,10 @@ public class MyGcmListenerService extends GcmListenerService {
      */
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        String title = data.getString("title");
-        String message = data.getString("message");
+        Bundle notificationBundle = (Bundle)data.get("notification");
+        String title = notificationBundle.getString("title");
+        String message = notificationBundle.getString("body");
+        System.out.println(data.toString());
 
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Title: " + title);

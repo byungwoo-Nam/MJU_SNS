@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +20,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.example.mju_sns.util.config.app.URLConnector;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -91,7 +97,7 @@ public class SignUpPhotoActivity extends Activity implements View.OnClickListene
                 // 이후의 처리가 카메라와 같으므로 일단  break없이 진행합니다.
                 // 실제 코드에서는 좀더 합리적인 방법을 선택하시기 바랍니다.
                 mImageCaptureUri = data.getData();
-                Log.d("SmartWheel",mImageCaptureUri.getPath().toString());
+                Log.d("mapChat",mImageCaptureUri.getPath().toString());
             }
 
             case PICK_FROM_CAMERA:
@@ -124,7 +130,7 @@ public class SignUpPhotoActivity extends Activity implements View.OnClickListene
 
                 // CROP된 이미지를 저장하기 위한 FILE 경로
                 String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()+
-                        "/SmartWheel/"+ System.currentTimeMillis()+".jpg";
+                        "/mapChat/"+ System.currentTimeMillis()+".jpg";
 
                 if(extras != null)
                 {
@@ -158,6 +164,17 @@ public class SignUpPhotoActivity extends Activity implements View.OnClickListene
             Log.e("uri", mImageCaptureUri.toString());
             //사진의 경로
             Log.e("Path", absoultePath);
+
+            URLConnector urlConnector = new URLConnector();
+            JSONObject param = new JSONObject();
+            try {
+                param.put("mode", "imageUpload");
+                param.put("path", absoultePath);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            urlConnector.starter(param, true, true);
+
             Toast.makeText(this, "사진 등록이 완료되었습니다.", Toast.LENGTH_SHORT).show();
 
             //DB로 사진 전송
@@ -201,14 +218,14 @@ public class SignUpPhotoActivity extends Activity implements View.OnClickListene
     /*
      * Bitmap을 저장하는 부분
      */
-    //SmartWheel 생성하여 그곳에 이미지 저장
+    //mapChat 생성하여 그곳에 이미지 저장
     private void storeCropImage(Bitmap bitmap, String filePath) {
-        // SmartWheel 폴더를 생성하여 이미지를 저장하는 방식이다.
-        String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/SmartWheel";
-        File directory_SmartWheel = new File(dirPath);
+        // mapChat 폴더를 생성하여 이미지를 저장하는 방식이다.
+        String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/mapChat";
+        File directory_mapChat = new File(dirPath);
 
-        if(!directory_SmartWheel.exists()) // SmartWheel 디렉터리에 폴더가 없다면 (새로 이미지를 저장할 경우에 속한다.)
-            directory_SmartWheel.mkdir();
+        if(!directory_mapChat.exists()) // mapChat 디렉터리에 폴더가 없다면 (새로 이미지를 저장할 경우에 속한다.)
+            directory_mapChat.mkdir();
 
         File copyFile = new File(filePath);
         BufferedOutputStream out = null;

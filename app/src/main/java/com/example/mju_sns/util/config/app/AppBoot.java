@@ -6,9 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.mju_sns.util.config.database.FeedReaderDbHelper;
 
-import java.util.UUID;
-import java.util.concurrent.CountDownLatch;
-
 import static android.content.Context.MODE_PRIVATE;
 
 public class AppBoot {
@@ -16,7 +13,6 @@ public class AppBoot {
     private Activity activity;
     private SQLiteDatabase mDB;
     private DeviceUuidFactory duf;
-    private URLConnector urlConnector;
 
     private String uuid;
     private String fcmToken;
@@ -27,18 +23,14 @@ public class AppBoot {
     }
 
     public void init(){
-        permissionCheck();
         createDB();
         getUUID();
         this.isMember = checkMember();
     }
 
-    public void permissionCheck(){
-    }
     public void createDB(){
         FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(this.activity);
-        mDB = mDbHelper.getWritableDatabase();
-        mDbHelper.onCreate(mDB);
+        mDB = mDbHelper.getReadableDatabase();
     }
     public void getUUID(){
         this.duf = new DeviceUuidFactory(this.activity);

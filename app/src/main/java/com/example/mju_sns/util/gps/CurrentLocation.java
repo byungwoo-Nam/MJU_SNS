@@ -66,15 +66,15 @@ public class CurrentLocation extends AppCompatActivity {
                         JSONObject param = new JSONObject();
                         try {
                             SharedPreferences prefs = activity.getSharedPreferences("mju_sns", MODE_PRIVATE);
-                            String token = prefs.getString("token", "");
+                            String id = prefs.getString("id", "");
                             param.put("mode", "updateLocation");
-                            param.put("gcm_id", token);
+                            param.put("id", id);
                             param.put("location_latitude", location.getLatitude());
                             param.put("location_longitude", location.getLongitude());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        urlConnector.getData(param, false);
+                        urlConnector.starter(param, false, false);
 
 //                        Toast.makeText(activity, "타입"+location.getProvider() + "," + location.getLatitude() + "," +location.getLongitude(), Toast.LENGTH_SHORT).show();
                         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&

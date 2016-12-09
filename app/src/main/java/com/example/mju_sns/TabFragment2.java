@@ -1,109 +1,133 @@
 package com.example.mju_sns;
 
-import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
+import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.TextView;
+
+import com.example.mju_sns.util.config.app.ListViewAdapter;
+import com.example.mju_sns.util.config.database.CursorHelper;
+import com.example.mju_sns.util.config.database.FeedReaderContract;
+import com.example.mju_sns.util.config.database.FeedReaderDbHelper;
+import com.example.mju_sns.util.dto.Writings;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
-public class TabFragment2 extends Fragment {
-    private ArrayList<listItem> list;
+public class TabFragment2 extends BaseFragment implements AbsListView.OnScrollListener {
+    private List<Writings> list = new ArrayList();
     private ListView lv;
-    private MyAdapter mAdatper;
+    private ListViewAdapter listViewAdatper;
+
+    private boolean isLoading = false;
+    private int pageNum = 1;    // 현재 페이지 번호
+    private boolean mLockListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.tab_fragment_2, container, false);
+        lv = (ListView)view.findViewById(R.id.lv);
+        listViewAdatper = new ListViewAdapter(list, getActivity(), "writings");
+        lv.setAdapter(listViewAdatper);
+        lv.setOnScrollListener(this);
 
-        View v = inflater.inflate(R.layout.tab_fragment_2, container, false);
-        list=new ArrayList<listItem>();     // ArrayList로 생성
-        lv = (ListView)v.findViewById(R.id.lv);
-
-        mAdatper=new MyAdapter(list);
-        lv.setAdapter(mAdatper);
-
-        //아이템 추가
-        list.add(new listItem(R.drawable.apple,"하","취업"));
-        list.add(new listItem(R.drawable.banana,"존나","되면"));
-        list.add(new listItem(R.drawable.cherry,"짱나네","접는다."));
-        list.add(new listItem(R.drawable.apple,"하","취업"));
-        list.add(new listItem(R.drawable.banana,"존나","되면"));
-        list.add(new listItem(R.drawable.cherry,"짱나네","접는다."));
-        list.add(new listItem(R.drawable.apple,"하","취업"));
-        list.add(new listItem(R.drawable.banana,"존나","되면"));
-        list.add(new listItem(R.drawable.cherry,"짱나네","접는다."));
-
-        return v;
+        return view;
     }
 
-    // ListView의 아이템에 들어가는 커스텀된 데이터들의 묶음
-    public class listItem{
-        private int profile;    // R.drawable.~ 리소스 아이디 값을 받아오는 변수
-        private String name;    // String 카카오톡 대화 목록의 이름
-        private String chat;    // String 마지막 대화
-        // 매개변수가 있는 생성자로 받아와 값을 전달한다.
-        public listItem(int profile, String name, String chat){
-            this.profile=profile;
-            this.name=name;
-            this.chat=chat;
-        }
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount)
+    {
+//        // 현재 가장 처음에 보이는 셀번호와 보여지는 셀번호를 더한값이
+//        // 전체의 숫자와 동일해지면 가장 아래로 스크롤 되었다고 가정합니다.
+//        int count = totalItemCount - visibleItemCount;
+//
+//        if(firstVisibleItem >= count && totalItemCount != 0 && mLockListView == false){
+//            getListData();
+//        }
     }
 
-    // Adapter
-    public class MyAdapter extends BaseAdapter{
-        private ArrayList<listItem> list;
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+    }
 
-        public MyAdapter(ArrayList<listItem> list){
-            // Adapter 생성시 list값을 넘겨 받는다.
-            this.list=list;
+    @Override
+    public void onChange() {
+        listRefresh();
+    }
+
+    public void listRefresh(){
+        System.out.println(list.size());
+        list.clear();
+        System.out.println(list.size());
+
+        List<Writings> dataList = getListData();
+
+        System.out.println("!!!!!!!!!!!!!!!!!!!"+dataList.size());
+
+        // 아이템 추가
+        for(int i=0; i<dataList.size(); i++) {
+            System.out.println(dataList.get(i).getSeq());
+            System.out.println(dataList.get(i).getTitle());
+            list.add(dataList.get(i));
         }
 
-        @Override
-        public int getCount() {
-            // list의 사이즈 만큼 반환
-            return list.size();
-        }
+        listViewAdatper.notifyDataSetChanged();
 
-        @Override
-        public listItem getItem(int position) {
-            // 현재 position에 따른 list의 값을 반환 시켜준다.
-            return list.get(position);
-        }
+        mLockListView = false;
+    }
 
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
+    public List<Writings> getListData(){
+        mLockListView = true;
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            final int pos=position;
-            View v = convertView;
+        FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(getActivity());
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        // 데이터를 가져올 컬럼 정의
+        String[] projection = {
+                FeedReaderContract.FeedEntry.COLUMN_SEQ,
+                FeedReaderContract.FeedEntry.COLUMN_TITLE,
+                FeedReaderContract.FeedEntry.COLUMN_CONTENTS,
+                FeedReaderContract.FeedEntry.COLUMN_LOCATION_LATITUDE,
+                FeedReaderContract.FeedEntry.COLUMN_LOCATION_LONGITUDE,
+                FeedReaderContract.FeedEntry.COLUMN_LOCATION_RANGE,
+                FeedReaderContract.FeedEntry.COLUMN_DATE
+        };
 
-            if (v == null) {
-                LayoutInflater inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                v = inflater.inflate(R.layout.writing_list_item, parent, false);
+        Cursor cursor = db.query(
+                FeedReaderContract.FeedEntry.TABLE_NAME,	// 테이블 이름
+                projection,				    // 컬럼
+                null,				        // WHERE 절의 컬럼
+                null,			            // WHERE 절의 컬럼 값
+                null,					    // row를 그룹화하지 않도록
+                null,					    // 그룹화한 row 를 필터 하지 않도록
+                "seq desc"		            // ORDER BY 절
+        );
 
-                ImageView profile=(ImageView)v.findViewById(R.id.profile_image);
-                TextView name=(TextView)v.findViewById(R.id.name);
-                TextView chat=(TextView)v.findViewById(R.id.chat);
+        CursorHelper cursorHelper = new CursorHelper(cursor, Writings.class);
+        return (List<Writings>)cursorHelper.getList();
 
-                profile.setImageResource(getItem(pos).profile);
-                name.setText(getItem(pos).name);
-                chat.setText(getItem(pos).chat);
-            }
-            return v;
-        }
+
+//        URLConnector urlConnector = new URLConnector();
+//        JSONObject param = new JSONObject();
+//        Gson gson = new Gson();
+//        SharedPreferences prefs = getActivity().getSharedPreferences("mju_sns", MODE_PRIVATE);
+//        String token = prefs.getString("token", "");
+//        try {
+//            param.put("mode", "getWritingsList");
+//            param.put("token", token);
+//            param.put("pageNum", pageNum);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        String result = urlConnector.starter(param, true);
+//        gson.toJson(result);
+//
+//        return gson.fromJson(result, new TypeToken<List<Writings>>(){}.getType());
     }
 }
 

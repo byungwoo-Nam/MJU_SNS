@@ -1,8 +1,6 @@
 package com.example.mju_sns;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -21,7 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class MapSelectActivity extends Activity implements MapView.MapViewEventListener, MapView.CurrentLocationEventListener{
+public class DetailViewActivity extends Activity implements MapView.MapViewEventListener, MapView.CurrentLocationEventListener{
 
     CodeConfig codeConfig = new CodeConfig();
 

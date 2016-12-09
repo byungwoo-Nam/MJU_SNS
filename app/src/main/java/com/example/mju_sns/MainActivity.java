@@ -14,26 +14,20 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.mju_sns.util.gps.CurrentLocation;
-
-import net.daum.mf.map.api.MapView;
 
 public class MainActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private CurrentLocation currentLocation;
     private LocationManager locationManager;
-    public static MapView mapView;
+    private TabPagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mapView = new MapView(this);
 
         // Adding Toolbar to the activity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -55,8 +49,9 @@ public class MainActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.pager);
 
         // Creating TabPagerAdapter adapter
-        TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(pagerAdapter);
+        viewPager.setOffscreenPageLimit(3);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         // Set TabSelectedListener
@@ -64,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+                //((BaseFragment)pagerAdapter.getItem(tab.getPosition())).onChange();
+                ((BaseFragment)pagerAdapter.instantiateItem(viewPager, viewPager.getCurrentItem())).onChange();
+                //pagerAdapter.getItem(tab.getPosition()).onResume();
+
             }
 
             @Override
@@ -73,10 +72,18 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
             }
         });
 
+    }
+
+    public void onTabChange(int index){
+        tabLayout.getTabAt(index).select();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
     }
 
     @Override

@@ -60,7 +60,7 @@ public class Splash extends Activity {
                 .setPermissionListener(permissionlistener)
                 .setDeniedMessage("권한을 허용하지 않으면 서비스를 이용할 수 없습니다.\n\n[설정]메뉴에서 권한을 확인해 주세요.")
                 .setPermissions(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.GET_ACCOUNTS,
-                        android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                        android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .check();
     }
 
@@ -141,7 +141,7 @@ public class Splash extends Activity {
                         SharedPreferences prefs = activity.getSharedPreferences("mju_sns", MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putString("isMember", "true");
-                        editor.putString("token", appBoot.getFcmToken());
+                        editor.putString("id", appBoot.getUuid());
                         editor.commit();
                         dialog.dismiss();
                         intent = new Intent(Splash.this, MainActivity.class);
@@ -162,7 +162,7 @@ public class Splash extends Activity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String result = urlConnector.getData(param, true);
+        String result = urlConnector.starter(param, true, false);
         if(result!=""){
             return Integer.parseInt(result) > 0 ? false : true;
         }else{
@@ -181,7 +181,7 @@ public class Splash extends Activity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String result = urlConnector.getData(param, true);
+        String result = urlConnector.starter(param, true, false);
         return Integer.parseInt(result)==1 ? true : false;
     }
 }

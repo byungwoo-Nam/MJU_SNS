@@ -17,7 +17,6 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        db.execSQL(FeedReaderContract.SQL_DELETE_TABLE);
         db.execSQL(FeedReaderContract.SQL_CREATE_TABLE);
     }
 
