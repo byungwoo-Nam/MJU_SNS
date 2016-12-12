@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.example.mju_sns.util.config.app.CodeConfig;
 import com.example.mju_sns.util.gps.CurrentLocation;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,10 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Initializing the TabLayout
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.addTab(tabLayout.newTab().setText("지도"));
-        tabLayout.addTab(tabLayout.newTab().setText("내가 쓴글"));
-        tabLayout.addTab(tabLayout.newTab().setText("받은 메세지"));
-        tabLayout.addTab(tabLayout.newTab().setText("환경설정"));
+        for(String s : CodeConfig.TAB_NAME){
+            tabLayout.addTab(tabLayout.newTab().setText(s));
+        }
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         // Initializing ViewPager

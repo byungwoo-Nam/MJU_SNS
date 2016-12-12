@@ -125,14 +125,14 @@ public class CurrentLocation extends AppCompatActivity {
             } else {
                 Log.e("GPS Enable", "false");
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        //startActivity(intent);
-                        activity.finish();
-                    }
-                });
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        //Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+//                        //startActivity(intent);
+//                        activity.finish();
+//                    }
+//                });
             }
         }
     }

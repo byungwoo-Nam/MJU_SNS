@@ -114,7 +114,6 @@ public class TabFragment1 extends BaseFragment implements MapView.MapViewEventLi
                             }
 
                             String result = urlConnector.starter(param, true, false);
-                            System.out.println(result);
                             writings = gson.fromJson(result, Writings.class);
 
 
@@ -134,7 +133,7 @@ public class TabFragment1 extends BaseFragment implements MapView.MapViewEventLi
                             values.put( FeedReaderContract.FeedEntry.COLUMN_DATE, writings.getDate());
 
                             // 데이터 추가
-                            long newRowId = db.insert(FeedReaderContract.FeedEntry.TABLE_NAME, null, values);
+                            long newRowId = db.insert(FeedReaderContract.FeedEntry.SEND_TABLE_NAME, null, values);
 
                             resetFragment();
 

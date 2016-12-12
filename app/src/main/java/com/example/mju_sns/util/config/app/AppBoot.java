@@ -30,7 +30,7 @@ public class AppBoot {
 
     public void createDB(){
         FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(this.activity);
-        mDB = mDbHelper.getReadableDatabase();
+        mDB = mDbHelper.getWritableDatabase();
     }
     public void getUUID(){
         this.duf = new DeviceUuidFactory(this.activity);

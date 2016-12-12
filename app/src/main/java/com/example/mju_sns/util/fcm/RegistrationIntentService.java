@@ -60,5 +60,6 @@ public class RegistrationIntentService extends IntentService {
         Intent registrationComplete = new Intent(QuickstartPreferences.REGISTRATION_COMPLETE);
         registrationComplete.putExtra("token", token);
         LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
+        System.out.println("testsssssssssssssssssssssss ^^^ ::" + token);
     }
 }

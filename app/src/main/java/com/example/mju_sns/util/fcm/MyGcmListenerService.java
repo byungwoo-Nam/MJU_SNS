@@ -2,8 +2,10 @@ package com.example.mju_sns.util.fcm;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,7 +13,14 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.mju_sns.R;
+import com.example.mju_sns.util.config.database.FeedReaderContract;
+import com.example.mju_sns.util.config.database.FeedReaderDbHelper;
+import com.example.mju_sns.util.dto.Writings;
 import com.google.android.gms.gcm.GcmListenerService;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by kook
@@ -27,17 +36,24 @@ public class MyGcmListenerService extends GcmListenerService {
      */
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        Bundle notificationBundle = (Bundle)data.get("notification");
-        String title = notificationBundle.getString("title");
-        String message = notificationBundle.getString("body");
-        System.out.println(data.toString());
+        try {
+            JSONObject notification = new JSONObject(data.get("notification").toString());
+            String title = notification.getString("title");
+            String message = notification.getString("body");
+            String type = data.getString("type");
+            if(type.equals("newWritings")){
+                insertWritings(data.getString("writings"));
+            }
 
-        Log.d(TAG, "From: " + from);
-        Log.d(TAG, "Title: " + title);
-        Log.d(TAG, "Message: " + message);
+            Log.d(TAG, "From: " + from);
+            Log.d(TAG, "Title: " + title);
+            Log.d(TAG, "Message: " + message);
 
-        // GCM으로 받은 메세지를 디바이스에 알려주는 sendNotification()을 호출한다.
-        sendNotification(title, message);
+            // GCM으로 받은 메세지를 디바이스에 알려주는 sendNotification()을 호출한다.
+            sendNotification(title, message);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -65,5 +81,31 @@ public class MyGcmListenerService extends GcmListenerService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private void insertWritings(String writingsStr){
+        Gson gson = new Gson();
+        Writings writings = gson.fromJson(writingsStr, Writings.class);
+
+        FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(this.getApplicationContext());
+
+        // 데이터베이스를 쓰기 모드로 가져온다.
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        // 데이터 준비
+        ContentValues values = new ContentValues();
+        values.put( FeedReaderContract.FeedEntry.COLUMN_SEQ, writings.getSeq());
+        values.put( FeedReaderContract.FeedEntry.COLUMN_TITLE, writings.getTitle());
+        values.put( FeedReaderContract.FeedEntry.COLUMN_CONTENTS, writings.getContents());
+        values.put( FeedReaderContract.FeedEntry.COLUMN_LOCATION_LATITUDE, writings.getLocation_latitude());
+        values.put( FeedReaderContract.FeedEntry.COLUMN_LOCATION_LONGITUDE, writings.getLocation_longitude());
+        values.put( FeedReaderContract.FeedEntry.COLUMN_LOCATION_RANGE, writings.getLocation_range());
+        values.put( FeedReaderContract.FeedEntry.COLUMN_DATE, writings.getDate());
+
+        // 데이터 추가
+        long newRowId = db.insert(FeedReaderContract.FeedEntry.RECIEVE_TABLE_NAME, null, values);
+
+        System.out.println("GCM!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println(newRowId);
     }
 }

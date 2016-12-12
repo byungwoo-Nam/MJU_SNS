@@ -1,6 +1,8 @@
 package com.example.mju_sns.util.dto;
 
-public class Writings {
+import java.io.Serializable;
+
+public class Writings implements Serializable {
     public int getSeq() {
         return seq;
     }
@@ -65,6 +67,14 @@ public class Writings {
         this.date = date;
     }
 
+    public boolean getIsapply() {
+        return isapply;
+    }
+
+    public void setIsapply(boolean isapply) {
+        this.isapply = isapply;
+    }
+
     private int seq;
     private int user_seq;
     private String title;
@@ -73,4 +83,5 @@ public class Writings {
     private String location_longitude;
     private int location_range;
     private String date;
+    private boolean isapply;
 }

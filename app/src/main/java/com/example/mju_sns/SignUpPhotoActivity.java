@@ -168,12 +168,12 @@ public class SignUpPhotoActivity extends Activity implements View.OnClickListene
             URLConnector urlConnector = new URLConnector();
             JSONObject param = new JSONObject();
             try {
-                param.put("mode", "imageUpload");
+                param.put("mode", "profileChange");
                 param.put("path", absoultePath);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            urlConnector.starter(param, true, true);
+            urlConnector.test(true, absoultePath);
 
             Toast.makeText(this, "사진 등록이 완료되었습니다.", Toast.LENGTH_SHORT).show();
 

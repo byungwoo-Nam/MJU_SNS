@@ -64,11 +64,13 @@ public class MapSelectActivity extends Activity implements MapView.MapViewEventL
     }
 
     public void locationSelect(View v){
+        mapArea.removeView(mMapView);
         onBackPressed();
     }
 
     public void locationCancel(){
         current_location = orig_location;
+        mapArea.removeView(mMapView);
         onBackPressed();
     }
 
@@ -83,7 +85,6 @@ public class MapSelectActivity extends Activity implements MapView.MapViewEventL
     @Override
     public void onPause() {
         super.onPause();
-        mapArea.removeView(mMapView);
     }
 
     @Override

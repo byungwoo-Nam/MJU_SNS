@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detail_area"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <net.daum.mf.map.api.MapView
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@+id/title_textview" />
+        <TextView
+            android:id="@+id/title_textview"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:textSize="30dp"
+            android:background="@drawable/border"
+            android:text=""
+            android:gravity="center"
+            android:layout_alignParentTop="true" />
+    />
+
+    <RelativeLayout
+        android:id="@+id/content_area"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/map_view">
+        <TextView
+            android:id="@+id/location_textview"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/border"
+            android:text=""
+            android:gravity="center"
+            android:textSize="20dp"
+            android:layout_alignParentTop="true" />
+        <Button
+            android:text="수락하기"
+            android:id="@+id/apply"
+            android:background="@drawable/btn_blue"
+            style="@style/ButtonText"
+            android:onClick="requestApply"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true" />
+    </RelativeLayout>
+</RelativeLayout>

@@ -36,9 +36,14 @@ public class CursorHelper {
             Class[] paramString = new Class[1];
             paramString[0] = String.class;
 
+            //Boolean parameter
+            Class[] paramBoolean = new Class[1];
+            paramBoolean[0] = Boolean.TYPE;
+
             while(cursor.moveToNext()){
                 Object obj = cls.newInstance();
                 for(int i = 0; i < columns.length; i++) {
+                    System.out.println(columns[i].toString() + "::" + getFieldType(columns[i]));
                     switch (getFieldType(columns[i])){
                         case "int":
                             method = cls.getMethod("set"+stringFirstUpper(columns[i]), paramInt);
@@ -47,6 +52,10 @@ public class CursorHelper {
                         case "String":
                             method = cls.getMethod("set"+stringFirstUpper(columns[i]), paramString);
                             method.invoke(obj, new String(cursor.getString(i)));
+                            break;
+                        case "boolean":
+                            method = cls.getMethod("set"+stringFirstUpper(columns[i]), paramBoolean);
+                            method.invoke(obj, cursor.getInt(i)>0);
                             break;
                         default:
                             break;
