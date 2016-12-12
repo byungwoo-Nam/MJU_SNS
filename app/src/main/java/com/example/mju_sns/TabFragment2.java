@@ -1,11 +1,13 @@
 package com.example.mju_sns;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.mju_sns.util.config.app.ListViewAdapter;
@@ -29,7 +31,14 @@ public class TabFragment2 extends BaseFragment{
         lv = (ListView)view.findViewById(R.id.lv);
         listViewAdatper = new ListViewAdapter(list, getActivity(), "writings");
         lv.setAdapter(listViewAdatper);
-
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parentView, View clickedView, int position, long id){
+                Intent intent = new Intent(getContext(), DetailViewActivity.class);
+                intent.putExtra("type", "SEND");
+                intent.putExtra("data", list.get(position));
+                startActivity(intent);
+            }
+        });
         return view;
     }
 

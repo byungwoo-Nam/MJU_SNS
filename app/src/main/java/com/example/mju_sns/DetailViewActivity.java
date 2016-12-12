@@ -6,22 +6,31 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.mju_sns.util.config.app.CodeConfig;
+import com.example.mju_sns.util.config.app.ListViewAdapter;
 import com.example.mju_sns.util.config.app.URLConnector;
+import com.example.mju_sns.util.config.database.CursorHelper;
 import com.example.mju_sns.util.config.database.FeedReaderContract;
 import com.example.mju_sns.util.config.database.FeedReaderDbHelper;
+import com.example.mju_sns.util.dto.Reply;
 import com.example.mju_sns.util.dto.Writings;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
@@ -29,6 +38,11 @@ import net.daum.mf.map.api.MapView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.example.mju_sns.R.id.lv;
 
 
 public class DetailViewActivity extends Activity implements MapView.MapViewEventListener{
@@ -38,10 +52,15 @@ public class DetailViewActivity extends Activity implements MapView.MapViewEvent
     MapView mMapView;
     RelativeLayout mapArea;
 
+    EditText edit_reply;
+
     Intent intent;
-    Button apply_button;
 
     Writings writings;
+
+    private List<Reply> list = new ArrayList();
+    private ListView lv;
+    private ListViewAdapter listViewAdatper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +69,7 @@ public class DetailViewActivity extends Activity implements MapView.MapViewEvent
 
         intent = getIntent();
         writings = (Writings) intent.getSerializableExtra("data");
+        String type = intent.getStringExtra("type");
 
         mapArea = (RelativeLayout)findViewById(R.id.detail_area);
         mMapView = (MapView)findViewById(R.id.map_view);
@@ -70,10 +90,15 @@ public class DetailViewActivity extends Activity implements MapView.MapViewEvent
         TextView content_textview = (TextView) findViewById(R.id.title_textview);
         TextView location_textview = (TextView) findViewById(R.id.location_textview);
 
-        apply_button = (Button)findViewById(R.id.apply);
+        lv = (ListView)findViewById(R.id.lv);
+        listViewAdatper = new ListViewAdapter(list, this, "reply");
+        lv.setAdapter(listViewAdatper);
 
-        if(writings.getIsapply()){
-            removeButton();
+        if(type.equals("SEND") || writings.getIsapply()){
+            setDefaultLayout(false);
+            listRefresh();
+        }else{
+            setDefaultLayout(true);
         }
 
         title_textview.setText(writings.getTitle());
@@ -97,8 +122,36 @@ public class DetailViewActivity extends Activity implements MapView.MapViewEvent
         }
     }
 
-    public void removeButton(){
-        apply_button.setVisibility(View.GONE);
+    public void listRefresh(){
+        list.clear();
+        List<Reply> dataList = getListData();
+
+        // 아이템 추가
+        for(int i=0; i<dataList.size(); i++) {
+            list.add(dataList.get(i));
+        }
+
+        listViewAdatper.notifyDataSetChanged();
+    }
+
+    public List<Reply> getListData(){
+        URLConnector urlConnector = new URLConnector();
+        JSONObject param = new JSONObject();
+        Gson gson = new Gson();
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("mju_sns", MODE_PRIVATE);
+        String id = prefs.getString("id", "");
+        try {
+            param.put("mode", "getReplyList");
+            param.put("id", id);
+            param.put("writings_seq", writings.getSeq());
+            //param.put("pageNum", pageNum);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String result = urlConnector.starter(param, true, false);
+
+        return gson.fromJson(result, new TypeToken<List<Reply>>(){}.getType());
     }
 
     public void requestApply(View v){
@@ -135,11 +188,51 @@ public class DetailViewActivity extends Activity implements MapView.MapViewEvent
                         // 데이터 추가
                         db.update(FeedReaderContract.FeedEntry.RECIEVE_TABLE_NAME, values, "seq=?", new String[]{writings.getSeq()+""});
 
-                        removeButton();
+                        setDefaultLayout(false);
+                        listRefresh();
                     }
                 })
                 .setNegativeButton("아니오", null)
                 .show();
+    }
+
+    public void setDefaultLayout(boolean b){
+        // default(true) : 버튼o, 댓글x -> 수락하기 전
+        if(b){
+            RelativeLayout rl = (RelativeLayout)findViewById(R.id.content_area);
+            rl.setVisibility(View.VISIBLE);
+            LinearLayout ll = (LinearLayout)findViewById(R.id.reply_area);
+            ll.setVisibility(View.GONE);
+        }else{
+            RelativeLayout rl = (RelativeLayout)findViewById(R.id.content_area);
+            rl.setVisibility(View.GONE);
+            LinearLayout ll = (LinearLayout)findViewById(R.id.reply_area);
+            ll.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void sendReply(View v){
+        edit_reply = (EditText)findViewById(R.id.reply_content);
+
+        final String content = edit_reply.getText().toString().trim();
+        if (content.getBytes().length > 0) {
+            URLConnector urlConnector = new URLConnector();
+            JSONObject param = new JSONObject();
+            Gson gson = new Gson();
+            SharedPreferences prefs = getSharedPreferences("mju_sns", MODE_PRIVATE);
+            String id = prefs.getString("id", "");
+            try {
+                param.put("mode", "sendReply");
+                param.put("id", id);
+                param.put("writings_seq", writings.getSeq());
+                param.put("content", content);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            String result = urlConnector.starter(param, true, false);
+            listRefresh();
+        }
     }
 
     public void locationCancel(){

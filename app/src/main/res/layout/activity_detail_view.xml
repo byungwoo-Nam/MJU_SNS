@@ -10,7 +10,7 @@
     <net.daum.mf.map.api.MapView
         android:id="@+id/map_view"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="250dp"
         android:layout_below="@+id/title_textview" />
         <TextView
             android:id="@+id/title_textview"
@@ -21,8 +21,6 @@
             android:text=""
             android:gravity="center"
             android:layout_alignParentTop="true" />
-    />
-
     <RelativeLayout
         android:id="@+id/content_area"
         android:orientation="vertical"
@@ -32,16 +30,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/map_view">
-        <TextView
-            android:id="@+id/location_textview"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/border"
-            android:text=""
-            android:gravity="center"
-            android:textSize="20dp"
-            android:layout_alignParentTop="true" />
+        android:layout_below="@+id/location_textview">
         <Button
             android:text="수락하기"
             android:id="@+id/apply"
@@ -51,4 +40,51 @@
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true" />
     </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/reply_area"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/location_textview">
+        <ListView
+            android:id="@+id/lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="8">
+        </ListView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="2">
+            <EditText
+                android:id="@+id/reply_content"
+                android:text=""
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/button1"
+                android:text="전송"
+                android:onClick="sendReply"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/location_textview"
+        android:layout_width="match_parent"
+        android:background="@drawable/border"
+        android:text=""
+        android:gravity="center"
+        android:textSize="15dp"
+        android:layout_below="@+id/map_view"
+        android:layout_alignParentStart="true"
+        android:layout_height="30dp" />
 </RelativeLayout>

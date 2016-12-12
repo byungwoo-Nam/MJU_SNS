@@ -3,14 +3,18 @@ package com.example.mju_sns.util.config.app;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.mju_sns.R;
+import com.example.mju_sns.util.dto.Reply;
 import com.example.mju_sns.util.dto.Writings;
 
 import org.json.JSONException;
@@ -59,6 +63,9 @@ public class ListViewAdapter extends BaseAdapter {
                 case "writings":
                     v = inflater.inflate(R.layout.list_item, parent, false);
                     break;
+                case "reply":
+                    v = inflater.inflate(R.layout.reply_list_item, parent, false);
+                    break;
                 default:
                     break;
             }
@@ -67,6 +74,9 @@ public class ListViewAdapter extends BaseAdapter {
         switch (classType){
             case "writings":
                 writingsList(v, pos);
+                break;
+            case "reply":
+                replyList(v, pos);
                 break;
             default:
                 break;
@@ -108,5 +118,24 @@ public class ListViewAdapter extends BaseAdapter {
         }
 
         date.setText(((Writings)getItem(pos)).getDate());
+    }
+
+    public void replyList(View v, int pos) {
+        boolean message_left = ((Reply)getItem(pos)).getMine();
+        TextView content = (TextView)v.findViewById(R.id.content);
+        content.setText(((Reply)getItem(pos)).getContent());
+        content.setBackground(ContextCompat.getDrawable(v.getContext(), (message_left ? R.drawable.bubble_b : R.drawable.bubble_a)));
+
+        LinearLayout chatMessageContainer = (LinearLayout)v.findViewById(R.id.reply_row);
+        int align;
+        if(message_left) {
+            align = Gravity.RIGHT;
+            message_left = false;
+        }else{
+            align = Gravity.LEFT;
+            message_left=true;
+        }
+        chatMessageContainer.setGravity(align);
+
     }
 }
